@@ -287,7 +287,6 @@ Plans with 100+ resources get categorized and ranked. Top 10 highest-risk change
 terraform-plan-impact-summarizer/
 ├── terraform-plan-impact-summarizer.md   # The prompt (paste this into AI)
 ├── README.md                             # You are here
-├── POST.md                               # LinkedIn post
 └── SPEC.md                               # Full specification
 ```
 
