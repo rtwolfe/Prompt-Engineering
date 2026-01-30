@@ -65,14 +65,7 @@ The problem: you describe a quick automation task, and the AI hands you a script
 <div align="center">
 
 ```
-┌────────────────┐
-│  Your Idea     │
-│  "back up a    │
-│   folder to    │
-│   a .zip..."   │
-└───────┬────────┘
-        │
-        ▼
+
 ┌────────────────────────────────────────────────────────────┐
 │                PYTHON SCRIPT GENERATOR                      │
 │                                                            │
