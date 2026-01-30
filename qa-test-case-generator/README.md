@@ -105,7 +105,7 @@ Most QA test cases are written after the fact — skimming a PR, guessing at edg
 
 ### 1. Load
 
-Copy [`qa-test-case-generator.md`](./qa-test-case-generator.md) into a new Claude conversation as the system prompt.
+Copy [`qa-test-case-generator.md`](./qa-test-case-generator.md) into a new AI conversation as the system prompt.
 
 ### 2. Paste your input
 
