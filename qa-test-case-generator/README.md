@@ -277,7 +277,6 @@ INTAKE/
 ├── qa_test_case_generator_prs_requirements.md       # Original spec
 ├── SPEC.md                                          # Spec (copy)
 ├── README.md                                        # You are here
-└── POST.md                                          # LinkedIn post
 ```
 
 <br>
