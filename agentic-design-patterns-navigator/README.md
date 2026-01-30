@@ -289,9 +289,10 @@ The first output is a starting point. Adjust SLOs, add constraints, change the u
 ## File Structure
 
 ```
-INTAKE/
+prompts/examples/agentic-design-patterns-navigator/
 ├── agentic-design-patterns-navigator.md  # The prompt (paste this into AI)
 ├── README.md     # You are here
+├── POST.md       # LinkedIn post
 └── SPEC.md       # Full build specification
 ```
 
