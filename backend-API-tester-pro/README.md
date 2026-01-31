@@ -113,7 +113,7 @@ Most teams write happy-path tests and call it done. The contract violations, aut
 
 ### 1. Load
 
-Copy [`backend-API-tester-pro.md`](./backend-API-tester-pro.md) into a new Claude conversation.
+Copy [`backend-API-tester-pro.md`](./backend-API-tester-pro.md) into a new GPT, Gemini, Claude conversation.
 
 ### 2. Paste your API spec
 
