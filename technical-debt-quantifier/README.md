@@ -1,3 +1,142 @@
+<div align="center">
+
+# Startup Technical Debt Quantifier
+
+### Convert "we have some legacy code" into "$47,000 per quarter in lost engineering velocity."
+
+<br>
+
+![Domain](https://img.shields.io/badge/SDLC%20Automation-purple?style=for-the-badge)
+![Category](https://img.shields.io/badge/Quality%20Control%20%2F%20QA-blue?style=for-the-badge)
+![AI Powered](https://img.shields.io/badge/AI%20Powered-orange?style=for-the-badge)
+![License](https://img.shields.io/badge/MIT-green?style=for-the-badge)
+
+<br>
+
+**Author:** Tim Wolfe — [GitHub](https://github.com/rtwolfe) | [Telegram](https://t.me/timwolfe)
+
+<br>
+
+```
+Codebase + Team Size + Budget  →  Board-Ready Financial Debt Report
+```
+
+<br>
+
+[Overview](#overview) · [How It Works](#how-it-works) · [Quick Start](#quick-start) · [What You Get](#what-you-get) · [Domains](#domains) · [Examples](#examples) · [Pro Tips](#pro-tips)
+
+</div>
+
+<br>
+
+---
+
+<br>
+
+## Overview
+
+Engineering teams can't get refactoring budget because they describe debt in technical terms. Boards don't approve "reducing cyclomatic complexity" — they approve investments with measurable ROI.
+
+**Startup Technical Debt Quantifier** translates your codebase into the language of finance: dollars lost per quarter, remediation investment required, payback period, and 3-year ROI. It turns "we need to refactor" into a business case that gets funded.
+
+> SonarQube reports technical debt in minutes. This prompt reports it in dollars that appear on income statements.
+
+<br>
+
+### Why This Exists
+
+| Without This Tool | With Startup Technical Debt Quantifier |
+|---|---|
+| "We have some legacy code issues" | "Technical debt costs $156K/quarter" |
+| Engineering asks for refactoring time; leadership asks "why?" | Complete ROI analysis: $141K investment, 5-month payback, 234% Year 1 return |
+| Vague sense that velocity is declining | Precise measurement: 40% of engineering capacity lost to debt |
+| Refactoring feels like a cost center | Remediation framed as investment with measurable returns |
+| Board doesn't understand technical updates | CFO-ready report with financial metrics and benchmarks |
+| No urgency to address debt | Compound interest model shows cost of delay |
+
+<br>
+
+---
+
+<br>
+
+## How It Works
+
+<div align="center">
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    STARTUP TECHNICAL DEBT QUANTIFIER                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+     INPUTS                        ANALYSIS                        OUTPUT
+┌─────────────────┐         ┌─────────────────────┐         ┌─────────────────┐
+│                 │         │                     │         │   BOARD-READY   │
+│ • Codebase      │         │  ┌───────────────┐  │         │   FINANCIAL     │
+│ • Team Size     │────────▶│  │  Code Quality │  │         │   REPORT        │
+│ • Eng Budget    │         │  │   Analysis    │  │         │                 │
+│ • Company Stage │         │  └───────┬───────┘  │         │ ┌─────────────┐ │
+│                 │         │          │          │         │ │ $156K/QTR   │ │
+└─────────────────┘         │          ▼          │         │ │ DEBT TAX    │ │
+                            │  ┌───────────────┐  │         │ └─────────────┘ │
+     OPTIONAL               │  │   Financial   │  │         │                 │
+┌─────────────────┐         │  │   Modeling    │  │         │ ┌─────────────┐ │
+│ • Sprint Data   │         │  │              │  │────────▶│ │ $187K       │ │
+│ • Bug-Fix Ratio │────────▶│  │ $/hr × hours │  │         │ │ REMEDIATION │ │
+│ • Coverage Rpts │         │  │ = $ impact   │  │         │ └─────────────┘ │
+│ • CI/CD Configs │         │  └───────┬───────┘  │         │                 │
+└─────────────────┘         │          │          │         │ ┌─────────────┐ │
+                            │          ▼          │         │ │ 234% ROI    │ │
+                            │  ┌───────────────┐  │         │ │ 5-MO PAYBACK│ │
+                            │  │  Benchmarking │  │         │ └─────────────┘ │
+                            │  │  & ROI Calc   │  │         │                 │
+                            │  └───────────────┘  │         │ + Remediation   │
+                            │                     │         │   Roadmap       │
+                            └─────────────────────┘         └─────────────────┘
+```
+
+</div>
+
+<br>
+
+**The workflow is four phases:**
+
+| Phase | What Happens | What It Produces |
+|-------|-------------|-----------------|
+| **1. Context** | Parse team size, budget, stage, data sources | Financial parameters + stage benchmarks |
+| **2. Analysis** | Scan codebase for complexity, duplication, coverage, dependencies | Technical debt inventory with effort estimates |
+| **3. Modeling** | Convert every metric to dollars, model accumulation | Debt tax, remediation costs, ROI projections |
+| **4. Report** | Rank by business impact, build roadmap | Board-ready financial assessment |
+
+<br>
+
+---
+
+<br>
+
+## Quick Start
+
+### 1. Load
+
+Copy [`technical-debt-quantifier.md`](./technical-debt-quantifier.md) into a new Claude or ChatGPT conversation.
+
+### 2. Provide context
+
+```
+COMPANY CONTEXT:
+- Company: YourCo
+- Stage: Series A
+- Product Type: B2B SaaS
+- Codebase Age: 2 years
+
+ENGINEERING TEAM:
+- Team Size: 8 engineers
+- Average Fully-Loaded Cost: $195,000/year
+
+REPOSITORY ACCESS:
+- github.com/yourco/platform (access granted)
+```
+
 ### 3. Receive your report
 
 A complete financial assessment: executive summary with headline dollar figure, debt tax breakdown, remediation roadmap with ROI, and stage-appropriate benchmarks.
