@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playwright Test Scaffolder — Quick Start</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111113;
+            --bg-tertiary: #18181b;
+            --bg-hover: #1f1f23;
+            --border-subtle: #27272a;
+            --border-default: #3f3f46;
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent: #f59e0b;
+            --accent-hover: #fbbf24;
+            --accent-subtle: rgba(245, 158, 11, 0.1);
+            --accent-border: rgba(245, 158, 11, 0.3);
+            --success: #22c55e;
+            --success-subtle: rgba(34, 197, 94, 0.1);
+            --danger: #ef4444;
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 740px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent), #d97706);
+            border-radius: var(--radius-md);
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #0a0a0b;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .section-number {
+            width: 28px;
+            height: 28px;
+            background: var(--accent-subtle);
+            color: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.125rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-left: auto;
+        }
+
+        .badge-required {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .badge-optional {
+            background: rgba(113, 113, 122, 0.15);
+            color: var(--text-muted);
+        }
+
+        .field {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .help-text {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 0.375rem;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 0.8125rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-subtle);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        textarea.tall { min-height: 180px; }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            padding-right: 2.5rem;
+            cursor: pointer;
+        }
+
+        select option {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        /* Radio cards */
+        .radio-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .radio-option {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .radio-option input { display: none; }
+
+        .radio-option label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.875rem 0.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .radio-option label:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-default);
+        }
+
+        .radio-option input:checked + label {
+            background: var(--accent-subtle);
+            border-color: var(--accent);
+        }
+
+        .radio-title {
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: var(--text-primary);
+        }
+
+        .radio-desc {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-top: 0.125rem;
+        }
+
+        /* Checkboxes */
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-size: 0.75rem;
+        }
+
+        .checkbox-option:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-default);
+        }
+
+        .checkbox-option input { display: none; }
+
+        .checkbox-option.active {
+            background: var(--accent-subtle);
+            border-color: var(--accent-border);
+            color: var(--accent);
+        }
+
+        /* Inline fields */
+        .inline-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 500px) {
+            .inline-fields { grid-template-columns: 1fr; }
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #0a0a0b;
+            padding: 1rem 2rem;
+            font-size: 0.875rem;
+            width: 100%;
+        }
+
+        .btn-primary:hover { background: var(--accent-hover); }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            border-color: var(--border-default);
+        }
+
+        .btn-reset {
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .btn-reset:hover { color: var(--danger); }
+
+        /* Output area */
+        .output-section {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .output-section.visible { display: block; }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .output-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .output-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            font-size: 0.75rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--success-subtle);
+            border: 1px solid var(--success);
+            border-radius: var(--radius-md);
+            padding: 0.625rem 1.25rem;
+            color: var(--success);
+            font-size: 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            z-index: 1000;
+            animation: toastIn 0.3s ease;
+        }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* Submit area */
+        .submit-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .button-row {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .section { animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">PW</div>
+            <h1>Playwright Test Scaffolder</h1>
+            <p class="subtitle">Generate a ready-to-paste prompt from your user story</p>
+        </header>
+
+        <form id="intakeForm">
+
+            <!-- Section 1: User Story -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">1</span>
+                    <span class="section-title">User Story</span>
+                    <span class="badge badge-required">Required</span>
+                </div>
+
+                <div class="field">
+                    <label for="storyTitle">Story Title / Summary</label>
+                    <input type="text" id="storyTitle" placeholder="e.g., User can reset password via email">
+                </div>
+
+                <div class="field">
+                    <label for="acceptanceCriteria">Acceptance Criteria</label>
+                    <textarea id="acceptanceCriteria" class="tall" placeholder="1. Clicking 'Reset Password' sends an email to the registered address
+2. Email contains a one-time link valid for 24 hours
+3. Clicking the link opens a password reset form
+4. New password must meet strength requirements
+5. Successful reset redirects to login with confirmation message"></textarea>
+                    <p class="help-text">Numbered list preferred. Each criterion becomes one or more test cases.</p>
+                </div>
+            </div>
+
+            <!-- Section 2: Base URL -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">2</span>
+                    <span class="section-title">Base URL</span>
+                    <span class="badge badge-required">Required</span>
+                </div>
+
+                <div class="field">
+                    <label for="baseUrl">Application URL</label>
+                    <input type="text" id="baseUrl" placeholder="https://app.example.com or {{BASE_URL}}">
+                </div>
+            </div>
+
+            <!-- Section 3: Page Context -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">3</span>
+                    <span class="section-title">Page Context</span>
+                    <span class="badge badge-optional">Optional</span>
+                </div>
+
+                <div class="field">
+                    <label for="pageContext">Page Description</label>
+                    <textarea id="pageContext" placeholder="Login page at /login with email field, password field, 'Sign In' button, and 'Forgot Password?' link below the form. Error messages appear as red text below each field."></textarea>
+                    <p class="help-text">Describe page layout, element labels, and button text for better locator generation.</p>
+                </div>
+            </div>
+
+            <!-- Section 4: Authentication -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">4</span>
+                    <span class="section-title">Authentication</span>
+                    <span class="badge badge-optional">Optional</span>
+                </div>
+
+                <div class="field">
+                    <label>Auth Method</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" name="authMethod" id="authNone" value="none" checked>
+                            <label for="authNone">
+                                <span class="radio-title">None</span>
+                                <span class="radio-desc">No auth needed</span>
+                            </label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="authMethod" id="authStorage" value="storageState">
+                            <label for="authStorage">
+                                <span class="radio-title">Storage State</span>
+                                <span class="radio-desc">Playwright auth file</span>
+                            </label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="authMethod" id="authApi" value="api">
+                            <label for="authApi">
+                                <span class="radio-title">API Login</span>
+                                <span class="radio-desc">REST endpoint</span>
+                            </label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="authMethod" id="authOther" value="other">
+                            <label for="authOther">
+                                <span class="radio-title">Other</span>
+                                <span class="radio-desc">Custom method</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field" id="authDetailsField" style="display:none;">
+                    <label for="authDetails">Auth Details</label>
+                    <input type="text" id="authDetails" placeholder="e.g., storageState from tests/.auth/user.json">
+                </div>
+            </div>
+
+            <!-- Section 5: Existing Page Objects -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">5</span>
+                    <span class="section-title">Existing Page Objects</span>
+                    <span class="badge badge-optional">Optional</span>
+                </div>
+
+                <div class="field">
+                    <label for="existingPoms">POM Classes to Reuse</label>
+                    <textarea id="existingPoms" placeholder="LoginPage already exists with login(email, password) method
+HeaderComponent has cartIcon and getCartCount() method"></textarea>
+                    <p class="help-text">One per line. Include class name and key methods/properties.</p>
+                </div>
+            </div>
+
+            <!-- Section 6: Framework Conventions -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">6</span>
+                    <span class="section-title">Framework Conventions</span>
+                    <span class="badge badge-optional">Optional</span>
+                </div>
+
+                <div class="inline-fields">
+                    <div class="field">
+                        <label for="fileNaming">Test File Extension</label>
+                        <select id="fileNaming">
+                            <option value="spec.ts">.spec.ts (default)</option>
+                            <option value="test.ts">.test.ts</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="testDir">Test Directory</label>
+                        <input type="text" id="testDir" placeholder="tests/e2e/">
+                    </div>
+                </div>
+                <div class="inline-fields">
+                    <div class="field">
+                        <label for="pageDir">Pages Directory</label>
+                        <input type="text" id="pageDir" placeholder="pages/">
+                    </div>
+                    <div class="field">
+                        <label for="customFixtures">Custom Fixtures</label>
+                        <input type="text" id="customFixtures" placeholder="e.g., custom test fixture name">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 7: Coverage Focus -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">7</span>
+                    <span class="section-title">Coverage Focus</span>
+                    <span class="badge badge-optional">Optional</span>
+                </div>
+
+                <div class="field">
+                    <label>Test categories to generate</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-option active" onclick="toggleCheck(this)">
+                            <input type="checkbox" name="coverage" value="happy" checked> Happy Path
+                        </div>
+                        <div class="checkbox-option active" onclick="toggleCheck(this)">
+                            <input type="checkbox" name="coverage" value="negative" checked> Negative Path
+                        </div>
+                        <div class="checkbox-option active" onclick="toggleCheck(this)">
+                            <input type="checkbox" name="coverage" value="edge" checked> Edge Cases
+                        </div>
+                        <div class="checkbox-option" onclick="toggleCheck(this)">
+                            <input type="checkbox" name="coverage" value="accessibility"> Accessibility
+                        </div>
+                    </div>
+                    <p class="help-text">All categories selected by default. Deselect to narrow output.</p>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="submit-section">
+                <div class="button-row">
+                    <button type="submit" class="btn btn-primary" style="flex:1;">Generate Prompt</button>
+                    <button type="button" class="btn btn-reset" onclick="resetForm()">Reset</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Output -->
+        <div class="output-section" id="outputSection">
+            <div class="output-header">
+                <h3>Generated Prompt</h3>
+                <button class="btn btn-secondary" onclick="copyPrompt()">Copy to Clipboard</button>
+            </div>
+            <div class="output-box" id="outputBox"></div>
+        </div>
+    </div>
+
+    <script>
+        // Auth method toggle
+        document.querySelectorAll('input[name="authMethod"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const detailsField = document.getElementById('authDetailsField');
+                detailsField.style.display = this.value === 'none' ? 'none' : 'block';
+                if (this.value === 'storageState') {
+                    document.getElementById('authDetails').placeholder = 'e.g., tests/.auth/user.json';
+                } else if (this.value === 'api') {
+                    document.getElementById('authDetails').placeholder = 'e.g., POST /api/auth/login with email/password';
+                } else if (this.value === 'other') {
+                    document.getElementById('authDetails').placeholder = 'Describe your auth setup';
+                }
+            });
+        });
+
+        // Checkbox toggle
+        function toggleCheck(el) {
+            const cb = el.querySelector('input[type="checkbox"]');
+            cb.checked = !cb.checked;
+            el.classList.toggle('active', cb.checked);
+        }
+
+        // Toast
+        function showToast(msg) {
+            const existing = document.querySelector('.toast');
+            if (existing) existing.remove();
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2500);
+        }
+
+        // Reset
+        function resetForm() {
+            if (confirm('Clear all fields?')) {
+                document.getElementById('intakeForm').reset();
+                document.getElementById('outputSection').classList.remove('visible');
+                document.getElementById('authDetailsField').style.display = 'none';
+                document.querySelectorAll('.checkbox-option').forEach(el => {
+                    const cb = el.querySelector('input[type="checkbox"]');
+                    if (cb.value === 'accessibility') {
+                        cb.checked = false;
+                        el.classList.remove('active');
+                    } else {
+                        cb.checked = true;
+                        el.classList.add('active');
+                    }
+                });
+            }
+        }
+
+        // Copy
+        function copyPrompt() {
+            const text = document.getElementById('outputBox').textContent;
+            navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard!'));
+        }
+
+        // Build prompt
+        function buildPrompt() {
+            const storyTitle = document.getElementById('storyTitle').value.trim();
+            const ac = document.getElementById('acceptanceCriteria').value.trim();
+            const baseUrl = document.getElementById('baseUrl').value.trim();
+            const pageContext = document.getElementById('pageContext').value.trim();
+            const authMethod = document.querySelector('input[name="authMethod"]:checked').value;
+            const authDetails = document.getElementById('authDetails').value.trim();
+            const existingPoms = document.getElementById('existingPoms').value.trim();
+            const fileNaming = document.getElementById('fileNaming').value;
+            const testDir = document.getElementById('testDir').value.trim();
+            const pageDir = document.getElementById('pageDir').value.trim();
+            const customFixtures = document.getElementById('customFixtures').value.trim();
+
+            const coverageChecks = [];
+            document.querySelectorAll('input[name="coverage"]:checked').forEach(cb => {
+                coverageChecks.push(cb.value);
+            });
+
+            // === IDENTITY ===
+            let prompt = `You are a senior SDET who specializes in Playwright test automation with TypeScript. You convert user stories with acceptance criteria into production-ready Playwright test scaffolds — complete with Page Object Model classes, test files, and coverage analysis.
+
+You follow Playwright's official best practices exactly:
+- Locator hierarchy: getByRole → getByLabel → getByText → getByTestId (last resort)
+- Web-first assertions: await expect(locator).toBeVisible(), never synchronous checks
+- Test isolation: every test runs independently, no shared state
+- Page Object Model: locators and actions in POM, assertions only in test files
+- No CSS selectors, no waitForTimeout(), no networkidle
+- All output in TypeScript with typed imports from @playwright/test
+
+---
+
+`;
+
+            // === USER INPUT ===
+            prompt += `USER STORY: ${storyTitle}\n\n`;
+            prompt += `ACCEPTANCE CRITERIA:\n${ac}\n\n`;
+            prompt += `BASE URL: ${baseUrl}\n`;
+
+            if (pageContext) {
+                prompt += `\nPAGE CONTEXT: ${pageContext}\n`;
+            }
+
+            if (authMethod !== 'none') {
+                let authStr = authMethod === 'storageState'
+                    ? `Use storageState from ${authDetails || 'auth.setup.ts'}`
+                    : authMethod === 'api'
+                    ? `API login via ${authDetails || 'POST /api/auth/login'}`
+                    : authDetails || 'Custom authentication';
+                prompt += `\nAUTH: ${authStr}\n`;
+            }
+
+            if (existingPoms) {
+                prompt += `\nEXISTING PAGE OBJECTS:\n${existingPoms}\n`;
+            }
+
+            // Framework conventions
+            const conventions = [];
+            if (fileNaming !== 'spec.ts') conventions.push(`Test files use .${fileNaming} extension`);
+            if (testDir) conventions.push(`Test directory: ${testDir}`);
+            if (pageDir) conventions.push(`Pages directory: ${pageDir}`);
+            if (customFixtures) conventions.push(`Custom fixtures: ${customFixtures}`);
+            if (conventions.length > 0) {
+                prompt += `\nFRAMEWORK CONVENTIONS:\n${conventions.map(c => '- ' + c).join('\n')}\n`;
+            }
+
+            // Coverage focus
+            if (coverageChecks.length > 0 && coverageChecks.length < 4) {
+                prompt += `\nCOVERAGE FOCUS: ${coverageChecks.join(', ')} tests only.\n`;
+            }
+
+            // === OUTPUT INSTRUCTIONS ===
+            prompt += `
+---
+
+Produce exactly:
+
+1. **Page Object Model class** (\`${pageDir || 'pages/'}{page-name}.page.ts\`)
+   - TypeScript class with typed Page and Locator imports
+   - All locators as readonly properties using the locator hierarchy above
+   - Action methods for each interaction — no assertions in the POM
+   - Inline comments on locator strategy choices
+
+2. **Test file** (\`${testDir || 'tests/'}{feature-name}.${fileNaming}\`)
+   - test.describe block grouping all tests for this story
+   - test.beforeEach with navigation and setup
+   - Individual test() blocks for each acceptance criterion
+   - Descriptive test names: 'should increment quantity when adding same product twice'
+   - Inline comments linking each test to its AC number: // Validates AC #3
+
+3. **Coverage summary**
+   - Table: AC # | Description | Test(s) | Status (Covered/Partial/Not automatable)
+   - Uncovered areas with explanation
+   - 2-4 suggested enhancements (security, accessibility, API-level)
+
+---
+
+HARD RULES:
+- Never use CSS class selectors (.btn-primary, #submit)
+- Never use page.waitForTimeout() or hardcoded delays
+- Never put expect() calls inside Page Object classes
+- Never generate tests that depend on execution order
+- Never use waitForLoadState('networkidle')
+- Never fabricate API endpoints — use // TODO placeholders
+- Every test must pass when run in isolation
+- All code must be TypeScript with typed imports, no \`any\` types`;
+
+            return prompt;
+        }
+
+        // Form submit
+        document.getElementById('intakeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const storyTitle = document.getElementById('storyTitle').value.trim();
+            const ac = document.getElementById('acceptanceCriteria').value.trim();
+            const baseUrl = document.getElementById('baseUrl').value.trim();
+
+            if (!storyTitle || !ac || !baseUrl) {
+                showToast('Fill in all required fields (Story, ACs, Base URL)');
+                return;
+            }
+
+            const prompt = buildPrompt();
+            const outputBox = document.getElementById('outputBox');
+            outputBox.textContent = prompt;
+
+            const outputSection = document.getElementById('outputSection');
+            outputSection.classList.add('visible');
+            outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    </script>
+</body>
+</html>
