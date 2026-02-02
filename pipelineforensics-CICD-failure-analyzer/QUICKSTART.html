@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PipelineForensics — Quick Start</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111113;
+            --bg-tertiary: #18181b;
+            --bg-hover: #1f1f23;
+            --border-subtle: #27272a;
+            --border-default: #3f3f46;
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent: #f59e0b;
+            --accent-hover: #fbbf24;
+            --accent-subtle: rgba(245, 158, 11, 0.1);
+            --accent-border: rgba(245, 158, 11, 0.3);
+            --success: #22c55e;
+            --success-subtle: rgba(34, 197, 94, 0.1);
+            --danger: #ef4444;
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent), #d97706);
+            border-radius: var(--radius-md);
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #0a0a0b;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .section-number {
+            width: 28px;
+            height: 28px;
+            background: var(--accent-subtle);
+            color: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.125rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-left: 0.5rem;
+        }
+
+        .badge-required {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .badge-optional {
+            background: var(--accent-subtle);
+            color: var(--accent);
+        }
+
+        .section-description {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .field {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .help-text {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 0.375rem;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.15s ease;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-subtle);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        textarea.tall { min-height: 200px; }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            padding-right: 2.5rem;
+            cursor: pointer;
+        }
+
+        select option {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .radio-option {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .radio-option input { display: none; }
+
+        .radio-option label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.875rem 0.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .radio-option label:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-default);
+        }
+
+        .radio-option input:checked + label {
+            background: var(--accent-subtle);
+            border-color: var(--accent);
+        }
+
+        .radio-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.8rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.625rem 0.875rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .checkbox-item:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-default);
+        }
+
+        .checkbox-item.checked {
+            background: var(--accent-subtle);
+            border-color: var(--accent-border);
+        }
+
+        .checkbox-item input {
+            accent-color: var(--accent);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .checkbox-item span {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .inline-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 500px) {
+            .inline-fields { grid-template-columns: 1fr; }
+            .radio-option { min-width: 100px; }
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border: none;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #0a0a0b;
+            padding: 1rem 2rem;
+            font-size: 0.95rem;
+            width: 100%;
+        }
+
+        .btn-primary:hover { background: var(--accent-hover); }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            border-color: var(--border-default);
+        }
+
+        .btn-reset {
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            padding: 0.5rem 1rem;
+            border: none;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .btn-reset:hover { color: var(--danger); }
+
+        .submit-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .button-row {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .submit-note {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .output-section {
+            display: none;
+            margin-top: 2rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .output-section.visible { display: block; }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .output-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .output-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            max-height: 60vh;
+            overflow: auto;
+        }
+
+        .output-box pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .toast {
+            position: fixed;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--success-subtle);
+            border: 1px solid var(--success);
+            border-radius: var(--radius-md);
+            padding: 0.75rem 1.5rem;
+            color: var(--success);
+            font-size: 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            z-index: 1100;
+            animation: toastIn 0.3s ease;
+        }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        .field-error { border-color: var(--danger) !important; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important; }
+        .field-error-msg { color: var(--danger); font-size: 0.7rem; margin-top: 0.25rem; }
+
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+            font-size: 0.7rem;
+        }
+
+        footer a { color: var(--accent); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">PF</div>
+            <h1>PipelineForensics</h1>
+            <p class="subtitle">CI/CD Failure Root Cause Analyzer &mdash; Quick Start</p>
+        </header>
+
+        <form id="intakeForm">
+            <!-- Section 1: Pipeline Platform -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">1</span>
+                    <span class="section-title">Pipeline Platform</span>
+                    <span class="badge badge-required">Required</span>
+                </div>
+                <p class="section-description">Which CI/CD system produced the failure log?</p>
+
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="platform" id="p-github" value="GitHub Actions" checked>
+                        <label for="p-github"><span class="radio-title">GitHub Actions</span></label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="platform" id="p-gitlab" value="GitLab CI/CD">
+                        <label for="p-gitlab"><span class="radio-title">GitLab CI</span></label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="platform" id="p-jenkins" value="Jenkins">
+                        <label for="p-jenkins"><span class="radio-title">Jenkins</span></label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="platform" id="p-circle" value="CircleCI">
+                        <label for="p-circle"><span class="radio-title">CircleCI</span></label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="platform" id="p-azure" value="Azure DevOps Pipelines">
+                        <label for="p-azure"><span class="radio-title">Azure DevOps</span></label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="platform" id="p-bitrise" value="Bitrise">
+                        <label for="p-bitrise"><span class="radio-title">Bitrise</span></label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="platform" id="p-buildkite" value="Buildkite">
+                        <label for="p-buildkite"><span class="radio-title">Buildkite</span></label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="platform" id="p-travis" value="Travis CI">
+                        <label for="p-travis"><span class="radio-title">Travis CI</span></label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="platform" id="p-teamcity" value="TeamCity">
+                        <label for="p-teamcity"><span class="radio-title">TeamCity</span></label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Failure Log -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">2</span>
+                    <span class="section-title">Failure Log</span>
+                    <span class="badge badge-required">Required</span>
+                </div>
+                <p class="section-description">Paste the raw CI/CD job log output from the failed pipeline run. Full logs are best; last 100+ lines is the minimum.</p>
+
+                <div class="field">
+                    <label for="failureLog">Raw log output</label>
+                    <textarea id="failureLog" class="tall" placeholder="2025-01-28T14:34:55Z Build error occurred&#10;2025-01-28T14:34:55Z TypeError: Cannot read properties of undefined ...&#10;2025-01-28T14:34:55Z     at getStaticPaths (src/pages/blog/[slug].tsx:24:38)&#10;..."></textarea>
+                </div>
+            </div>
+
+            <!-- Section 3: Code Diff -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">3</span>
+                    <span class="section-title">Recent Code Diff</span>
+                    <span class="badge badge-optional">Optional</span>
+                </div>
+                <p class="section-description">The git diff or commit summary associated with the failing run. Enables correlation between code changes and failure symptoms.</p>
+
+                <div class="field">
+                    <label for="codeDiff">Git diff or commit summary</label>
+                    <textarea id="codeDiff" placeholder="--- a/src/lib/api.ts&#10;+++ b/src/lib/api.ts&#10;@@ -12,7 +12,7 @@&#10; export async function getAllPosts() {&#10;-  const res = await fetch(...);&#10;+  const res = await fetch(...);"></textarea>
+                </div>
+            </div>
+
+            <!-- Section 4: Environment Metadata -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">4</span>
+                    <span class="section-title">Environment Metadata</span>
+                    <span class="badge badge-optional">Optional</span>
+                </div>
+                <p class="section-description">Runner OS, runtime versions, Docker image tags, resource constraints. Helps diagnose environment-specific failures.</p>
+
+                <div class="inline-fields">
+                    <div class="field">
+                        <label for="runnerOS">Runner OS</label>
+                        <input type="text" id="runnerOS" placeholder="e.g., ubuntu-22.04">
+                    </div>
+                    <div class="field">
+                        <label for="runtimeVersion">Runtime version(s)</label>
+                        <input type="text" id="runtimeVersion" placeholder="e.g., Node 18.19.0, Python 3.11">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="envExtra">Additional environment details</label>
+                    <textarea id="envExtra" style="min-height:80px" placeholder="Docker image tags, memory/CPU limits, environment variables (redact secrets)..."></textarea>
+                </div>
+            </div>
+
+            <!-- Section 5: Pipeline Configuration -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">5</span>
+                    <span class="section-title">Pipeline Configuration</span>
+                    <span class="badge badge-optional">Optional</span>
+                </div>
+                <p class="section-description">The workflow YAML, Jenkinsfile, or pipeline definition. Enables analysis of structure, caching, and conditional logic.</p>
+
+                <div class="field">
+                    <label for="pipelineConfig">Pipeline definition</label>
+                    <textarea id="pipelineConfig" placeholder="Paste your .github/workflows/*.yml, .gitlab-ci.yml, Jenkinsfile, etc."></textarea>
+                </div>
+            </div>
+
+            <!-- Section 6: Historical Context -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">6</span>
+                    <span class="section-title">Historical Context</span>
+                    <span class="badge badge-optional">Optional</span>
+                </div>
+                <p class="section-description">Prior run results improve flakiness scoring and pattern detection.</p>
+
+                <div class="field">
+                    <label for="history">Run history / flakiness notes</label>
+                    <textarea id="history" style="min-height:80px" placeholder="e.g., This test passed on the last 5 runs&#10;e.g., This job has been flaky for two weeks&#10;e.g., First failure on this branch"></textarea>
+                </div>
+            </div>
+
+            <!-- Section 7: Focus Areas -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">7</span>
+                    <span class="section-title">Diagnosis Focus</span>
+                    <span class="badge badge-optional">Optional</span>
+                </div>
+                <p class="section-description">Check any areas you want the diagnosis to emphasize.</p>
+
+                <div class="checkbox-group">
+                    <label class="checkbox-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" name="focus" value="flakiness">
+                        <span>Flakiness analysis (detailed scoring with indicators)</span>
+                    </label>
+                    <label class="checkbox-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" name="focus" value="blast-radius">
+                        <span>Blast radius (downstream impact assessment)</span>
+                    </label>
+                    <label class="checkbox-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" name="focus" value="prevention">
+                        <span>Prevention measures (recurrence avoidance)</span>
+                    </label>
+                    <label class="checkbox-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" name="focus" value="diff-correlation">
+                        <span>Diff-to-failure correlation (causal chain analysis)</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="submit-section">
+                <div id="validationMsg"></div>
+                <div class="button-row">
+                    <button type="submit" class="btn btn-primary" style="flex:1;">Generate Prompt</button>
+                    <button type="button" class="btn btn-reset" onclick="resetForm()">Reset</button>
+                </div>
+                <p class="submit-note">Generates a ready-to-paste prompt. Copy it into a Claude conversation to receive your forensic report.</p>
+            </div>
+        </form>
+
+        <!-- Output -->
+        <div class="output-section" id="outputSection">
+            <div class="output-header">
+                <h3>Generated Prompt</h3>
+                <button class="btn btn-secondary" onclick="copyPrompt()">Copy to Clipboard</button>
+            </div>
+            <div class="output-box">
+                <pre id="outputText"></pre>
+            </div>
+        </div>
+
+        <footer>
+            <p><strong>PipelineForensics</strong> by <a href="https://github.com/rtwolfe">Tim Wolfe</a> | <a href="https://t.me/timwolfe">Telegram</a></p>
+            <p style="margin-top:0.5rem;">Powered by Vox &mdash; VDD: Voice Driven Development</p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleCheck(el) {
+            var cb = el.querySelector('input[type="checkbox"]');
+            setTimeout(function() {
+                if (cb.checked) {
+                    el.classList.add('checked');
+                } else {
+                    el.classList.remove('checked');
+                }
+            }, 0);
+        }
+
+        function showToast(message) {
+            var existing = document.querySelector('.toast');
+            if (existing) existing.remove();
+            var toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(function() { toast.remove(); }, 2500);
+        }
+
+        function resetForm() {
+            if (!confirm('Clear all fields?')) return;
+            document.getElementById('intakeForm').reset();
+            document.getElementById('outputSection').classList.remove('visible');
+            var checked = document.querySelectorAll('.checkbox-item.checked');
+            for (var i = 0; i < checked.length; i++) checked[i].classList.remove('checked');
+            var errors = document.querySelectorAll('.field-error');
+            for (var i = 0; i < errors.length; i++) errors[i].classList.remove('field-error');
+            var msgs = document.querySelectorAll('.field-error-msg');
+            for (var i = 0; i < msgs.length; i++) msgs[i].remove();
+        }
+
+        function validate() {
+            var valid = true;
+            var errors = document.querySelectorAll('.field-error');
+            for (var i = 0; i < errors.length; i++) errors[i].classList.remove('field-error');
+            var msgs = document.querySelectorAll('.field-error-msg');
+            for (var i = 0; i < msgs.length; i++) msgs[i].remove();
+
+            var log = document.getElementById('failureLog');
+            if (!log.value.trim()) {
+                log.classList.add('field-error');
+                var msg = document.createElement('div');
+                msg.className = 'field-error-msg';
+                msg.textContent = 'Failure log is required';
+                log.parentElement.appendChild(msg);
+                valid = false;
+            }
+
+            var vmsg = document.getElementById('validationMsg');
+            if (!valid) {
+                vmsg.innerHTML = '<div style="color:var(--danger);font-size:0.8rem;margin-bottom:1rem;">Please provide the failure log before generating.</div>';
+            } else {
+                vmsg.innerHTML = '';
+            }
+
+            return valid;
+        }
+
+        function buildPrompt() {
+            var platform = document.querySelector('input[name="platform"]:checked').value;
+            var failureLog = document.getElementById('failureLog').value.trim();
+            var codeDiff = document.getElementById('codeDiff').value.trim();
+            var runnerOS = document.getElementById('runnerOS').value.trim();
+            var runtimeVersion = document.getElementById('runtimeVersion').value.trim();
+            var envExtra = document.getElementById('envExtra').value.trim();
+            var pipelineConfig = document.getElementById('pipelineConfig').value.trim();
+            var history = document.getElementById('history').value.trim();
+
+            var focusChecks = document.querySelectorAll('input[name="focus"]:checked');
+            var focusAreas = [];
+            for (var i = 0; i < focusChecks.length; i++) focusAreas.push(focusChecks[i].value);
+
+            var prompt = 'You are PipelineForensics, a senior DevOps engineer and CI/CD failure analyst. You diagnose pipeline failures by parsing raw logs, classifying root causes against a fixed taxonomy, correlating with code changes and environment context, and producing structured forensic reports with actionable fixes. You never guess \u2014 you cite evidence from the logs provided. You never give generic advice \u2014 you give specific, implementable remediation.\n\n---\n\n## Root Cause Taxonomy\n\nClassify every failure into exactly one primary category:\nCode Error | Dependency Failure | Environment Mismatch | Configuration Error | Test Failure (Deterministic) | Test Failure (Flaky) | Infrastructure/Resource | Timeout | Authentication/Permissions | External Service | Build Tool | Unknown\n\n---\n\n## Your Task\n\nAnalyze the following CI/CD failure and produce a structured forensic report.\n\n**Pipeline Platform:** ' + platform + '\n\n**Failure Log:**\n```\n' + failureLog + '\n```\n';
+
+            if (codeDiff) {
+                prompt += '\n**Recent Code Diff:**\n```\n' + codeDiff + '\n```\n';
+            }
+
+            var envBlock = '';
+            if (runnerOS) envBlock += 'Runner OS: ' + runnerOS + '\n';
+            if (runtimeVersion) envBlock += 'Runtime: ' + runtimeVersion + '\n';
+            if (envExtra) envBlock += envExtra + '\n';
+            if (envBlock) {
+                prompt += '\n**Environment Metadata:**\n```\n' + envBlock.trim() + '\n```\n';
+            }
+
+            if (pipelineConfig) {
+                prompt += '\n**Pipeline Configuration:**\n```\n' + pipelineConfig + '\n```\n';
+            }
+
+            if (history) {
+                prompt += '\n**Historical Context:**\n' + history + '\n';
+            }
+
+            if (focusAreas.length > 0) {
+                var focusMap = {
+                    'flakiness': 'Provide detailed flakiness analysis with specific indicators',
+                    'blast-radius': 'Provide thorough blast radius assessment with named downstream effects',
+                    'prevention': 'Emphasize prevention measures with specific implementation details',
+                    'diff-correlation': 'Trace the causal chain from code changes to the failure in detail'
+                };
+                prompt += '\n**Diagnosis Focus:**\n';
+                for (var i = 0; i < focusAreas.length; i++) {
+                    prompt += '- ' + focusMap[focusAreas[i]] + '\n';
+                }
+            }
+
+            prompt += '\n---\n\n## Output Format\n\nProduce a structured forensic report in markdown with exactly six sections. Every section is mandatory \u2014 never omit a section even if input is limited.\n\n```\n## FAILURE FORENSIC REPORT\n\n### 1. FAILURE SUMMARY\n[One-paragraph plain-language description of what failed, when, and at what stage.]\n\n### 2. ROOT CAUSE CLASSIFICATION\nCategory: [exactly one from the taxonomy]\nConfidence: [High | Medium | Low] \u2014 [one-sentence justification]\n\nEvidence:\n- [Specific log line or pattern, quoted verbatim]\n- [Correlation with diff, if provided]\n- [Supporting contextual signal]\n\n### 3. FLAKINESS ASSESSMENT\nScore: [0-10] \u2014 [one-sentence justification]\nIndicators: [List of specific flakiness signals or absence thereof]\n\n### 4. ACTIONABLE FIX\n[Exact code change, command, or config edit. Specify file(s) and line(s).]\n\nPriority: [Immediate | Next Sprint | Backlog]\nEstimated effort: [Quick fix (<30 min) | Moderate (1-4 hours) | Significant (>4 hours)]\n\n### 5. BLAST RADIUS\n[What is blocked, what can proceed, who is affected.]\n\n### 6. PREVENTION\n[1-3 targeted measures for this specific failure pattern.]\n```\n\n---\n\n## Hard Rules\n\n- Never fabricate log lines. Every piece of evidence must appear verbatim in the provided log.\n- Never guess at file paths or line numbers not in the input.\n- Never recommend rewriting the entire pipeline or test suite.\n- Never expose secrets, tokens, or credentials found in the log.\n- Never assign a flakiness score without citing specific indicators.\n- Never diagnose beyond the evidence.\n- Always preserve the six-section report structure.';
+
+            return prompt;
+        }
+
+        function copyPrompt() {
+            var text = document.getElementById('outputText').textContent;
+            navigator.clipboard.writeText(text).then(function() {
+                showToast('Copied to clipboard!');
+            });
+        }
+
+        document.getElementById('intakeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (!validate()) return;
+
+            var prompt = buildPrompt();
+            document.getElementById('outputText').textContent = prompt;
+
+            var outputSection = document.getElementById('outputSection');
+            outputSection.classList.add('visible');
+            outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    </script>
+</body>
+</html>
