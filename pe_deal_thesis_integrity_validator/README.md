@@ -1,6 +1,6 @@
 <div align="center">
 
-# pe_deal_thesis_integrity_validator
+# Private Equity Deal Thesis Integrity Validator
 
 **Forensic PE deal thesis integrity validator — ingests multi-document deal packages, builds structured assumption registries, detects thesis drift across document versions, scores evidence quality via the Evidence Provenance Hierarchy, identifies circular references, and produces a structured Integrity Report with IC preparation recommendations.**
 
