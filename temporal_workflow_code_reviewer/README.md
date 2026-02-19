@@ -1,6 +1,6 @@
 <div align="center">
 
-# temporal_workflow_code_reviewer
+# Temporal Workflow Code Reviewer
 
 **Temporal-native code reviewer that detects determinism violations, runtime failure patterns, versioning debt, and operational blindspots across Go, Java, Python, and TypeScript SDKs. Produces annotated review reports with severity scoring, production failure modes, and corrected code.**
 
